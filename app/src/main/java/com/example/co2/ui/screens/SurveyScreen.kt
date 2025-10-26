@@ -49,3 +49,41 @@ fun SurveyScreen(onCalculateClick: () -> Unit) {
         )
 
         Spacer(modifier = Modifier.height(24.dp))
+
+        // Transportation Section
+        SectionCard(
+            title = "Đi lại",
+            icon = Icons.Default.DirectionsCar
+        ) {
+            transportModes.forEach { mode ->
+                var km by remember { mutableStateOf("") }
+                var days by remember { mutableStateOf("") }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(
+                        checked = selectedModes.contains(mode),
+                        onCheckedChange = {
+                            if (it) selectedModes += mode else selectedModes -= mode
+                        }
+                    )
+                    Text(mode)
+                }
+                if (selectedModes.contains(mode)) {
+                    OutlinedTextField(
+                        value = km,
+                        onValueChange = { km = it },
+                        label = { Text("KM") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+                    OutlinedTextField(
+                        value = days,
+                        onValueChange = { days = it },
+                        label = { Text("Ngày") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+                    modeData = modeData + (mode to (km to days))
+                }
+            }
+            // Validate days <= daysInMonth
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
