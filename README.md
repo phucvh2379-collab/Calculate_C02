@@ -1,119 +1,142 @@
-# 🌱 ỨNG DỤNG TÍNH TOÁN KHÍ THẢI CO₂ VÀ HỆ THỐNG THỬ THÁCH CÁ NHÂN
+# 🌱 ỨNG DỤNG TÍNH TOÁN KHÍ THẢI CO₂ VÀ HỆ THỐNG THỬ THÁCH CÁ NHÂN (MAF)
+
+## 🧭 Mô tả hệ thống
+Ứng dụng di động được xây dựng bằng **Kotlin** và **Jetpack Compose**, giúp người dùng:
+- Theo dõi và **tính toán lượng khí thải CO₂ cá nhân** dựa trên hoạt động sinh hoạt.
+- Tham gia **các thử thách xanh (MAF)** để giảm phát thải và cải thiện lối sống.
+- Cung cấp **kiến thức bảo vệ môi trường**, hướng đến phát triển bền vững.
 
 ---
 
-## 📖 1. Lý do chọn đề tài
-
-Hiện nay, biến đổi khí hậu và ô nhiễm môi trường đang là vấn đề cấp bách toàn cầu. Trong đó, lượng **khí thải CO₂** phát sinh từ các hoạt động hàng ngày như di chuyển, ăn uống, sử dụng điện, tiêu dùng… là nguyên nhân chính gây **hiệu ứng nhà kính**.
-
-Tuy nhiên, đa số người dân chưa ý thức rõ về **mức phát thải cá nhân** cũng như **cách giảm thiểu**.
-
-Ứng dụng **Tính toán khí thải CO₂ và Hệ thống thử thách cá nhân** được phát triển nhằm giúp người dùng:
-
-- Nhận biết lượng CO₂ mình phát thải hàng ngày.
-- Theo dõi và cải thiện thói quen sống xanh.
-- Tham gia các thử thách giảm phát thải để nâng cao ý thức bảo vệ môi trường.
-
-Đây là một ứng dụng có tính **giáo dục – xã hội – bền vững**, phù hợp với xu hướng **chuyển đổi xanh** và **phát triển bền vững (SDGs)** hiện nay.
+## ⚙️ Tính năng chính
+✅ Nhập thông tin người dùng (tên, nghề nghiệp, tuổi)  
+✅ Chọn thời gian và thực hiện khảo sát về sinh hoạt (đi lại, năng lượng, tiêu thụ)  
+✅ Tự động tính toán lượng **CO₂ phát thải cá nhân**  
+✅ Đưa ra **biện pháp và thử thách xanh** tương ứng với kết quả  
+✅ Lưu dữ liệu người dùng bằng API nội bộ (DBHelper)  
+✅ Giao diện hiện đại sử dụng **Material 3** và **Navigation Compose**  
+✅ Có thể mở rộng để đồng bộ dữ liệu qua Internet
 
 ---
 
-## 💡 2. Ý tưởng
+## 🧩 Logic tính toán khí thải CO₂
+Ứng dụng sử dụng **các hệ số phát thải trung bình** cho từng hoạt động, ví dụ:
+- Đi xe máy: ~0.12 kg CO₂/km
+- Dùng điện sinh hoạt: ~0.65 kg CO₂/kWh
+- Ăn thịt đỏ: ~27 kg CO₂/kg
 
-Ứng dụng hoạt động như một **trợ lý môi trường cá nhân**, giúp người dùng tính toán, theo dõi và giảm lượng khí thải CO₂ từ các hoạt động thường ngày.
+Công thức tổng quát: Tổng CO₂ = Σ (hoạt động_i × hệ_số_i)
 
-**Người dùng có thể:**
 
-- Nhập dữ liệu sinh hoạt: phương tiện di chuyển, lượng điện sử dụng, ăn uống, tiêu dùng…
-- Ứng dụng tự động tính toán **lượng CO₂ phát thải** dựa trên hệ số chuẩn.
-- Xem **biểu đồ thống kê phát thải** theo ngày, tuần, tháng.
-- Tham gia **các thử thách xanh** như “Đi bộ thay vì đi xe máy”, “Ăn chay 1 ngày/tuần”, “Tiết kiệm 1kWh điện mỗi ngày”… để nhận huy hiệu hoặc điểm thưởng.
-- Chia sẻ thành tích và lan tỏa thông điệp sống xanh.
-
----
-
-## 🔍 3. Nghiên cứu và phân tích
-
-### 3.1. Nhu cầu người dùng
-- Mong muốn hiểu rõ mức phát thải cá nhân.
-- Cần công cụ trực quan, dễ dùng để theo dõi tiến độ sống xanh.
-- Có yếu tố **thử thách – động lực – phần thưởng**, giúp duy trì thói quen tốt.
-
-### 3.2. Đối tượng sử dụng
-- Học sinh, sinh viên, nhân viên văn phòng và bất kỳ ai quan tâm đến môi trường.
-- Người muốn thay đổi thói quen để hướng đến **cuộc sống xanh – bền vững**.
+Dữ liệu này được xử lý trong **SurveyScreen.kt** và kết quả hiển thị tại **ResultScreen.kt**, sau đó hiển thị thử thách trong **ChallengeScreen.kt**.
 
 ---
 
-## ⚙️ 4. Tính năng chính
+## 🏗️ Cấu trúc hệ thống
 
-### 1️⃣ Tính toán khí thải CO₂
-- Người dùng nhập thông tin về:  
-  🚗 Phương tiện di chuyển  
-  ⚡ Lượng điện tiêu thụ  
-  🍽️ Thói quen ăn uống  
-  🛍️ Hoạt động tiêu dùng
-- Ứng dụng tự động **tính toán lượng CO₂ tương ứng (kg CO₂/ngày)**.
+carbontracker/
+├── MainActivity.kt # Điểm khởi đầu ứng dụng
+├── navigation/
+│ └── AppNavigation.kt # Điều hướng giữa các màn hình
+├── data/
+│ ├── DBHelper.kt # Kết nối API lưu dữ liệu người dùng
+│ ├── UserData.kt # Mô hình dữ liệu người dùng
+│ └── UserDataState.kt # Trạng thái toàn cục
+├── ui/screens/
+│ ├── WelcomeScreen.kt # Màn hình chào
+│ ├── UserInfoScreen.kt # Nhập thông tin người dùng
+│ ├── DateSelectionScreen.kt # Chọn thời gian
+│ ├── SurveyScreen.kt # Khảo sát hoạt động
+│ ├── ResultScreen.kt # Kết quả CO₂
+│ ├── ChallengeScreen.kt # Thử thách xanh
+│ ├── DashboardScreen.kt # Bảng điều khiển
+│ └── KnowledgeScreen.kt # Kiến thức môi trường
+└── ui/theme/
+├── Color.kt
+├── Type.kt
+└── Theme.kt
 
-### 2️⃣ Theo dõi và thống kê
-- Biểu đồ trực quan hiển thị xu hướng phát thải theo thời gian.
-- Cảnh báo khi lượng CO₂ vượt ngưỡng trung bình.
-
-### 3️⃣ Hệ thống thử thách cá nhân
-- Danh sách thử thách xanh như:
-    - “Đi bộ 3km mỗi ngày”
-    - “Ăn chay 2 bữa/tuần”
-    - “Tắt điện 30 phút/ngày”
-- Mỗi thử thách giúp **giảm lượng CO₂** và người dùng nhận **điểm thưởng xanh**.
-
-### 4️⃣ Xếp hạng & Huy hiệu
-- Bảng xếp hạng người dùng tích cực.
-- Huy hiệu theo cấp độ: 🌿 Người mới, 🌳 Nhà bảo vệ môi trường, 🌎 Anh hùng xanh.
-
-### 5️⃣ Thống kê cá nhân
-- Tổng lượng CO₂ đã giảm được.
-- Tỷ lệ hoàn thành thử thách.
-- Gợi ý thói quen xanh phù hợp.
-
-### 6️⃣ Cài đặt & Hồ sơ
-- Cập nhật thông tin cá nhân.
-- Đặt mục tiêu giảm CO₂ hàng tuần/tháng.
-- Chuyển đổi đơn vị đo lường (kg – tấn).
 
 ---
 
-## 🧩 5. Công nghệ sử dụng
+## 🚀 Cài đặt
+### 1. Yêu cầu
+- Android Studio Giraffe trở lên
+- JDK 17
+- Android SDK 33+
 
-- **Ngôn ngữ:** Kotlin
-- **Giao diện:** Jetpack Compose (Material Design 3)
-- **Cơ sở dữ liệu:** SQLite (qua Room hoặc SQLiteOpenHelper)
-- **Biểu đồ:** MPAndroidChart hoặc Compose Charts
-- **Kiến trúc:** MVVM + Navigation Component
-- **Tương thích:** Android 8.0 (API 26) trở lên
-- **Hình ảnh:** Lưu trong thư mục `drawable/`
+### 2. Clone và chạy project
+```bash
+git clone https://github.com/<username>/CarbonTracker.git
+cd CarbonTracker
 
----
+💾 Database (server-side)
 
-## 📱 6. Giao diện minh hoạ (dự kiến)
+Server lưu dữ liệu người dùng và lịch sử CO₂:
+CREATE TABLE user_data (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    age INTEGER,
+    occupation TEXT,
+    co2_value REAL,
+    challenge_level TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+🔄 Quy trình hoạt động
 
-- **Màn hình chào mừng:** Logo và nút “Bắt đầu sống xanh”
-- **Màn hình khảo sát:** Nhập dữ liệu hoạt động hàng ngày
-- **Màn hình kết quả:** Hiển thị lượng CO₂ phát thải và so sánh trung bình
-- **Màn hình thử thách:** Danh sách thử thách xanh có thể tham gia
-- **Màn hình thống kê:** Biểu đồ theo thời gian
-- **Màn hình hồ sơ:** Huy hiệu, thành tích, mục tiêu
+Người dùng nhập thông tin cơ bản.
 
----
+Chọn tháng/năm cần tính.
 
-## 👥 7. Nhóm thực hiện
+Điền khảo sát sinh hoạt.
 
-- **Tên dự án:** Ứng dụng Tính toán khí thải CO₂ và Hệ thống thử thách cá nhân
-- **Thành viên:** Võ Nguyễn Phong Phú, Nguyễn Phạm Thanh Duy, Huỳnh Hồng Thịnh, Lê Văn Giang
-- **Giảng viên hướng dẫn:** Trương Quang Tuấn
+Ứng dụng tính toán lượng CO₂ phát thải.
 
----
+Hệ thống gợi ý thử thách giảm phát thải.
 
-## 🏁 Kết luận
+Người dùng theo dõi kết quả tại Dashboard.
 
-Ứng dụng **Tính toán khí thải CO₂ và Hệ thống thử thách cá nhân** không chỉ giúp người dùng **hiểu rõ tác động môi trường của bản thân**, mà còn **truyền cảm hứng hành động vì hành tinh xanh**.  
-Với mục tiêu **“Đo lường – Hành động – Truyền cảm hứng”**, ứng dụng góp phần **nâng cao ý thức cộng đồng** và **hướng tới tương lai bền vững**.
+📊 Ưu điểm
+
+🎨 Giao diện Material 3 hiện đại
+
+📱 Tương thích tốt trên mọi kích thước màn hình
+
+⚡ Xử lý nhanh, không lag
+
+🔄 Có thể mở rộng với API thực tế
+
+🧠 Công nghệ sử dụng
+
+Ngôn ngữ: Kotlin
+
+Framework: Jetpack Compose
+
+Giao diện: Material Design 3
+
+Navigation: Compose Navigation
+
+Database: SQLite / PHP API
+
+Kiến trúc: MVVM (đơn giản hóa)
+
+🔮 Mở rộng trong tương lai
+
+Tích hợp API khí hậu thực tế
+
+Hệ thống xếp hạng thử thách xanh
+
+Biểu đồ CO₂ theo tuần/tháng
+
+Đồng bộ dữ liệu qua Firebase / Cloud
+
+Chế độ cộng đồng chia sẻ thử thách
+
+🧑‍💻 Tác giả
+
+Nhóm sinh viên phát triển trong khuôn khổ môn Lập trình Thiết bị Di động.
+Công nghệ sử dụng: Kotlin + Jetpack Compose + Material 3
+
+🪪 Giấy phép
+
+MIT License – sử dụng tự do cho mục đích học tập và nghiên cứu.
