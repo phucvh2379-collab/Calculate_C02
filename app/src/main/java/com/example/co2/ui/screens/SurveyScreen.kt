@@ -87,3 +87,48 @@ fun SurveyScreen(onCalculateClick: () -> Unit) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Food Section
+        SectionCard(
+            title = "Ăn uống",
+            icon = Icons.Default.Restaurant
+        ) {
+            CheckboxItem(
+                text = "Ăn chay trường",
+                checked = UserDataState.isVegetarianFull,
+                onCheckedChange = { UserDataState.isVegetarianFull = it }
+            )
+
+            if (!UserDataState.isVegetarianFull) {
+                OutlinedTextField(
+                    value = UserDataState.vegetarianDays.toString(),
+                    onValueChange = { UserDataState.vegetarianDays = it.toIntOrNull() ?: 0 },
+                    label = { Text("Số ngày ăn chay") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+            }
+
+            CheckboxItem(
+                text = "Ăn thực phẩm chế biến sẵn",
+                checked = UserDataState.processedFood,
+                onCheckedChange = { UserDataState.processedFood = it }
+            )
+            if (UserDataState.processedFood) {
+                OutlinedTextField(
+                    value = UserDataState.processedFoodDays.toString(),
+                    onValueChange = { UserDataState.processedFoodDays = it.toIntOrNull() ?: 0 },
+                    label = { Text("Số ngày") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+            }
+
+            OutlinedTextField(
+                value = UserDataState.redMeatDays.toString(),
+                onValueChange = { UserDataState.redMeatDays = it.toIntOrNull() ?: 0 },
+                label = { Text("Số ngày ăn thịt đỏ") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
