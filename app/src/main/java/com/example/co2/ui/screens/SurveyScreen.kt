@@ -132,3 +132,28 @@ fun SurveyScreen(onCalculateClick: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Electricity Section
+        SectionCard(
+            title = "Sử dụng điện",
+            icon = Icons.Default.Bolt
+        ) {
+            OutlinedTextField(
+                value = UserDataState.electricityBill.toString(),
+                onValueChange = { UserDataState.electricityBill = it.toDoubleOrNull() ?: 0.0 },
+                label = { Text("Số tiền điện (VND)") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            OutlinedTextField(
+                value = UserDataState.familySize.toString(),
+                onValueChange = { UserDataState.familySize = it.toIntOrNull() ?: 1 },
+                label = { Text("Số người trong gia đình") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            LaunchedEffect(UserDataState.electricityBill, UserDataState.familySize) {
+                UserDataState.totalKWh = CarbonCalculator.calculateKWhFromBill(UserDataState.electricityBill, UserDataState.familySize)
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
