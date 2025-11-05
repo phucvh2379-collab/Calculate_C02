@@ -157,3 +157,68 @@ fun SurveyScreen(onCalculateClick: () -> Unit) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
+
+
+        // Consumption Section
+        SectionCard(
+            title = "Vật dụng",
+            icon = Icons.Default.ShoppingCart
+        ) {
+            CheckboxItem(
+                text = "Sử dụng túi tái sử dụng, bình nước cá nhân",
+                checked = UserDataState.useReusableBagBottle,
+                onCheckedChange = { UserDataState.useReusableBagBottle = it }
+            )
+
+            OutlinedTextField(
+                value = UserDataState.phoneHours.toString(),
+                onValueChange = { UserDataState.phoneHours = it.toDoubleOrNull() ?: 0.0 },
+                label = { Text("Giờ sử dụng điện thoại") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            OutlinedTextField(
+                value = UserDataState.laptopHours.toString(),
+                onValueChange = { UserDataState.laptopHours = it.toDoubleOrNull() ?: 0.0 },
+                label = { Text("Giờ sử dụng máy tính") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            OutlinedTextField(
+                value = UserDataState.gasUsesPerDay.toString(),
+                onValueChange = { UserDataState.gasUsesPerDay = it.toIntOrNull() ?: 0 },
+                label = { Text("Số lần dùng bếp gas/ngày") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            OutlinedTextField(
+                value = UserDataState.laundryInterval.toString(),
+                onValueChange = { UserDataState.laundryInterval = it.toIntOrNull() ?: 1 },
+                label = { Text("Khoảng cách giặt đồ (ngày)") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Button(
+            onClick = {
+                UserDataState.transportOptions = modeData.mapValues { (it.value.first.toDoubleOrNull() ?: 0.0) to (it.value.second.toIntOrNull() ?: 0) }
+                onCalculateClick()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary
+            )
+        ) {
+            Text(
+                text = "Tính toán CO₂",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
+}
