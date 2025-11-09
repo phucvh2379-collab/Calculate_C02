@@ -155,3 +155,106 @@ object CarbonCalculator {
 
         return totalCO2
     }
+
+    /**
+     * Calculate kWh from electricity bill and family size.
+     */
+    fun calculateKWhFromBill(billAmount: Double, familySize: Int): Double {
+        val taxExcluded = billAmount / 1.1 // Assume 10% VAT
+
+        var remaining = taxExcluded
+        var totalKWh = 0.0
+
+        // Tier 1: 0-50 kWh @ 1806 VND
+        if (remaining > 90300) {
+            totalKWh += 50.0
+            remaining -= 90300
+        } else {
+            totalKWh += remaining / 1806
+            return totalKWh / familySize
+        }
+
+        // Tier 2: 51-100 kWh @ 1866 VND
+        if (remaining > 93300) {
+            totalKWh += 50.0
+            remaining -= 93300
+        } else {
+            totalKWh += remaining / 1866
+            return totalKWh / familySize
+        }
+
+        // Tier 3: 101-200 kWh @ 2167 VND
+        if (remaining > 216700) {
+            totalKWh += 100.0
+            remaining -= 216700
+        } else {
+            totalKWh += remaining / 2167
+            return totalKWh / familySize
+        }
+
+        // Tier 4: 201-300 kWh @ 2729 VND
+        if (remaining > 272900) {
+            totalKWh += 100.0
+            remaining -= 272900
+        } else {
+            totalKWh += remaining / 2729
+            return totalKWh / familySize
+        }
+
+        // Tier 5: 301-400 kWh @ 3050 VND
+        if (remaining > 305000) {
+            totalKWh += 100.0
+            remaining -= 305000
+        } else {
+            totalKWh += remaining / 3050
+            return totalKWh / familySize
+        }
+
+        // Tier 6: >400 kWh @ 3151 VND
+        totalKWh += remaining / 3151
+
+        return totalKWh / familySize
+    }
+
+    /**
+     * Get emission level string based on CO2 value.
+     */
+    fun getEmissionLevel(co2: Double): String {
+        return when {
+            co2 < 3.0 -> "Thấp"
+            co2 < 5.0 -> "Trung bình"
+            else -> "Cao"
+        }
+    }
+
+    /**
+     * Get recommendations based on emission level and inputs.
+     */
+    fun getRecommendations(
+        co2: Double,
+        transportOptions: Map<String, Pair<Double, Int>>,
+        isVegetarianFull: Boolean,
+        useReusableBagBottle: Boolean,
+        acHours: Double
+    ): List<String> {
+        val recommendations = mutableListOf<String>()
+
+        if (transportOptions.containsKey("Motorbike") && transportOptions["rbike"]!!.second > 2) {
+            recommendations.add("Đi bộ hoặc xe đạp thay vì xe máy 1-2 lần/tuần để giảm 1.5 kg CO₂")
+        }
+
+        if (!isVegetarianFull) {
+            recommendations.add("Ăn chay 1-2 ngày/tuần để giảm 2.0 kg CO₂")
+        }
+
+        if (acHours > 6) {
+            recommendations.add("Giảm thời gian dùng điều hòa để tiết kiệm 1.0 kg CO₂")
+        }
+
+        if (!useReusableBagBottle) {
+            recommendations.add("Sử dụng túi tái sử dụng để giảm 0.8 kg CO₂")
+        }
+
+        return recommendations
+    }
+}
