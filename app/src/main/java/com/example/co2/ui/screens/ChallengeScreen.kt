@@ -156,3 +156,105 @@ fun ChallengeScreen(onBackClick: () -> Unit) {
         }
     }
 }
+@Composable
+fun ChallengeItem(
+    challenge: Challenge,
+    onToggleComplete: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = if (challenge.completed)
+                Color(0xFFE8F5E8) else MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = if (challenge.completed) 2.dp else 4.dp
+        )
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Day Circle
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(
+                        if (challenge.completed)
+                            Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "${challenge.day}",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            // Challenge Content
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = challenge.title,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (challenge.completed)
+                        Color(0xFF4CAF50) else MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text = challenge.description,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(top = 4.dp)
+                ) {
+                    Icon(
+                        imageVector = challenge.icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "Giảm ${challenge.co2Reduction}",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+
+            // Complete Button
+            if (challenge.completed) {
+                Icon(
+                    imageVector = Icons.Default.CheckCircle,
+                    contentDescription = "Completed",
+                    tint = Color(0xFF4CAF50),
+                    modifier = Modifier.size(32.dp)
+                )
+            } else {
+                Button(
+                    onClick = onToggleComplete,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    ),
+                    modifier = Modifier.height(36.dp)
+                ) {
+                    Text(
+                        text = "Hoàn thành",
+                        fontSize = 12.sp
+                    )
+                }
+            }
+        }
+    }
+}
