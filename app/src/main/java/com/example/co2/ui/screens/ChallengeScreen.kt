@@ -42,3 +42,117 @@ fun ChallengeScreen(onBackClick: () -> Unit) {
             Challenge(7, "Chia sẻ kiến thức", "Chia sẻ thông tin về bảo vệ môi trường cho bạn bè", Icons.Default.Share, "Tác động lan tỏa")
         )
     }
+    val completedChallenges = challenges.count { it.completed }
+    val progressPercentage = completedChallenges.toFloat() / challenges.size
+
+    LaunchedEffect(completedChallenges) {
+        UserDataState.challengeProgress = completedChallenges  // FIXED HERE
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // Top App Bar
+        TopAppBar(
+            title = { Text("Thử thách 7 ngày sống xanh") },
+            navigationIcon = {
+                IconButton(onClick = onBackClick) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = Color.White,
+                navigationIconContentColor = Color.White
+            )
+        )
+
+        Column(
+            modifier = Modifier.padding(24.dp)
+        ) {
+            // Progress Section
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color(0xFFE8F5E8)
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Tiến độ thử thách",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Box(
+                        modifier = Modifier.size(100.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            progress = progressPercentage,
+                            modifier = Modifier.fillMaxSize(),
+                            strokeWidth = 8.dp,
+                            color = Color(0xFF4CAF50)
+                        )
+                        Text(
+                            text = "$completedChallenges/7",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF4CAF50)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "Hoàn thành ${(progressPercentage * 100).toInt()}%",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
+
+                    if (completedChallenges == challenges.size) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "🎉 Chúc mừng! Bạn đã hoàn thành thử thách!",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF4CAF50)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Danh sách thử thách",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // Challenges List
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 24.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            itemsIndexed(challenges) { index, challenge ->
+                ChallengeItem(
+                    challenge = challenge,
+                    onToggleComplete = {
+                        challenges[index] = challenge.copy(completed = !challenge.completed)
+                    }
+                )
+            }
+        }
+    }
+}
